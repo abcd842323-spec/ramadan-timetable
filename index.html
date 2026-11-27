@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="description" content="Ramadan 1448 AH (2027) city-wise Sehri and Iftar timetable — daily Roza table for Delhi, Mumbai, Lucknow, Hyderabad, Kolkata, Makkah, Dubai, Dhaka, London and 30+ cities. Sehri end (Fajr) and Iftar (Maghrib) times calculated for your city." />
+<link rel="icon" href="data:," />
+<title>Ramadan Timetable — Sehri &amp; Iftar Times by City (1448 AH / 2027) | By Mahesh Kumar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
+  * { box-sizing: border-box; }
+  :root{
+    --bg:#f4f6f2; --surface:#ffffff; --surface2:#eef3ec; --ink:#14231c; --muted:#52655a;
+    --line:#d8e0d5; --green:#0b3d2e; --green2:#0f5a41; --gold:#b8860b; --gold-bg:#fdf3d7;
+    --gold-ink:#6d4e00; --chip:#e6efe7; --today:#0b3d2e; --friday:#7a4b00;
+    --shadow:0 1px 3px rgba(11,61,46,.10), 0 8px 24px rgba(11,61,46,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0c1712; --surface:#14231c; --surface2:#1a2e25; --ink:#eef4ee; --muted:#a9bcb0;
+      --line:#2b4237; --green:#0f5a41; --green2:#177a58; --gold:#e3b83c; --gold-bg:#2e2a12;
+      --gold-ink:#f0cd6a; --chip:#1d3329; --today:#177a58; --friday:#e3b83c;
+      --shadow:0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+    }
+  }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.55; }
+  .wrap{ max-width:1060px; margin:0 auto; padding:0 16px 56px; }
+  /* ---------- header band ---------- */
+  .band{ background:var(--green); color:#f2f7f1; margin:0 -16px; padding:30px 20px 26px; }
+  @media (prefers-color-scheme: dark){ .band{ background:#0a2e22; } }
+  .band .kicker{ font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#e9c766; margin:0 0 8px; }
+  .band h1{ margin:0; font-size:clamp(1.65rem,4.5vw,2.5rem); line-height:1.15; font-weight:800; }
+  .band h1 .ar{ font-family:"Amiri",serif; font-weight:700; color:#e9c766; }
+  .band p.sub{ margin:10px 0 0; max-width:720px; color:#cfdfd2; font-size:1rem; }
+  .band-stats{ display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+  .stat{ background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:10px 14px; min-width:150px; flex:1 1 150px; }
+  .stat b{ display:block; font-size:1.08rem; color:#fff; }
+  .stat span{ font-size:.8rem; color:#cfdfd2; }
+  #countdown{ color:#e9c766; font-weight:800; }
+  /* ---------- alert ---------- */
+  .alert{ background:var(--gold-bg); color:var(--gold-ink); border:1px solid var(--gold); border-radius:10px; padding:12px 16px; margin:18px 0 0; font-size:.94rem; }
+  .alert b{ font-weight:800; }
+  /* ---------- controls ---------- */
+  .controls{ background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:16px; margin-top:18px; display:grid; grid-template-columns:1fr; gap:12px; }
+  @media (min-width:760px){ .controls{ grid-template-columns:2fr 1.3fr 1.3fr; } }
+  label.f{ display:block; font-size:.8rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  select{ width:100%; padding:9px 10px; font:inherit; font-weight:600; color:var(--ink); background:var(--surface); border:1.5px solid var(--line); border-radius:9px; }
+  select:focus-visible, button:focus-visible, a:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+  .actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .btn{ appearance:none; border:0; cursor:pointer; font:inherit; font-weight:800; border-radius:9px; padding:10px 18px; min-height:44px; }
+  .btn-main{ background:var(--green2); color:#fff; }
+  .btn-ghost{ background:var(--surface); color:var(--ink); border:1.5px solid var(--line); }
+  .hint{ font-size:.85rem; color:var(--muted); margin:10px 0 0; }
+  /* ---------- sections ---------- */
+  section{ margin-top:34px; }
+  h2{ font-size:1.35rem; margin:0 0 6px; font-weight:800; }
+  h2 .hindi{ color:var(--muted); font-weight:600; font-size:1rem; }
+  .lede{ color:var(--muted); margin:0 0 14px; max-width:760px; }
+  /* ---------- today / summary cards ---------- */
+  .cards{ display:grid; grid-template-columns:1fr; gap:12px; }
+  @media (min-width:700px){ .cards{ grid-template-columns:repeat(3,1fr); } }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:16px; }
+  .card .tag{ font-size:.75rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--green2); }
+  @media (prefers-color-scheme: dark){ .card .tag{ color:#7fd1ab; } }
+  .card .big{ font-size:1.5rem; font-weight:800; margin:4px 0 2px; }
+  .card .small{ color:var(--muted); font-size:.9rem; }
+  .card .times{ display:flex; gap:18px; margin-top:10px; }
+  .card .times div b{ display:block; font-size:1.12rem; }
+  .card .times div span{ font-size:.78rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
+  /* ---------- table ---------- */
+  .tablebox{ background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); overflow:hidden; }
+  table{ width:100%; border-collapse:collapse; font-size:.95rem; }
+  thead th{ background:var(--green); color:#fff; text-align:left; padding:11px 12px; font-size:.8rem; letter-spacing:.05em; text-transform:uppercase; }
+  @media (prefers-color-scheme: dark){ thead th{ background:#0a2e22; } }
+  tbody td{ padding:9px 12px; border-top:1px solid var(--line); vertical-align:top; }
+  tbody tr:nth-child(even){ background:var(--surface2); }
+  td.roza{ font-weight:800; white-space:nowrap; }
+  td.time{ font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  td.dur{ color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .badge{ display:inline-block; font-size:.7rem; font-weight:800; padding:2px 8px; border-radius:999px; background:var(--chip); color:var(--green2); margin-left:6px; vertical-align:middle; }
+  @media (prefers-color-scheme: dark){ .badge{ color:#7fd1ab; } }
+  .badge.gold{ background:var(--gold-bg); color:var(--gold-ink); }
+  .badge.qadr{ background:var(--gold); color:#231a00; }
+  tr.qadr td{ background:var(--gold-bg); }
+  tr.friday td:first-child{ box-shadow:inset 4px 0 0 var(--gold); }
+  /* mobile: table becomes stacked rows */
+  @media (max-width:620px){
+    thead{ display:none; }
+    table, tbody, tr, td{ display:block; width:100%; }
+    tbody tr{ padding:10px 14px; border-top:1px solid var(--line); }
+    tbody tr:first-child{ border-top:0; }
+    tbody td{ border:0; padding:2px 0; }
+    td.roza{ font-size:1.02rem; }
+    td.datecell{ color:var(--muted); font-size:.88rem; }
+    td.time::before{ content:attr(data-l) " · "; color:var(--muted); font-weight:700; font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+    td.dur::before{ content:"Fast · "; color:var(--muted); font-weight:700; font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+  }
+  /* ---------- compare ---------- */
+  .compare td:first-child{ font-weight:700; }
+  /* ---------- duas ---------- */
+  .duas{ display:grid; grid-template-columns:1fr; gap:12px; }
+  @media (min-width:700px){ .duas{ grid-template-columns:1fr 1fr; } }
+  .dua{ background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:18px; }
+  .dua h3{ margin:0 0 8px; font-size:1.05rem; }
+  .dua .arabic{ font-family:"Amiri",serif; font-size:1.45rem; line-height:2; direction:rtl; text-align:right; margin:6px 0; }
+  .dua .translit{ font-style:italic; color:var(--ink); margin:6px 0; }
+  .dua .meaning{ color:var(--muted); font-size:.92rem; margin:6px 0 0; }
+  /* ---------- notes ---------- */
+  .notes{ background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:18px; }
+  .notes h3{ margin:16px 0 6px; font-size:1.02rem; }
+  .notes h3:first-child{ margin-top:0; }
+  .notes p, .notes li{ color:var(--ink); font-size:.95rem; }
+  .notes ul{ margin:6px 0; padding-left:20px; }
+  .ashra{ display:grid; grid-template-columns:1fr; gap:12px; }
+  @media (min-width:700px){ .ashra{ grid-template-columns:repeat(3,1fr); } }
+  footer{ margin-top:36px; color:var(--muted); font-size:.86rem; }
+  footer a{ color:var(--green2); }
+  @media print{
+    .controls, .actions, .alert{ display:none; }
+    body{ background:#fff; }
+    .band{ background:#fff; color:#000; margin:0; padding:8px 0; }
+    .band p.sub, .stat span{ color:#333; } .stat b{ color:#000; } .band h1 .ar, .band .kicker{ color:#000; }
+    .tablebox, .card, .notes{ box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="band">
+    <p class="kicker">Ramadan 1448 AH · रमज़ान टाइमटेबल</p>
+    <h1>Ramadan Sehri–Iftar Timetable <span class="ar">رمضان</span></h1>
+    <p class="sub">Daily Sehri end (Fajr) and Iftar (Maghrib) time for the whole month of Ramadan — pick your city and the full 29-Roza table changes to that city's times. Times are calculated from the sun's position for each city, the same method prayer-time calendars use.</p>
+    <div class="band-stats">
+      <div class="stat"><b>Mon 8 Feb – Mon 8 Mar 2027</b><span>Expected dates · 29 Rozas (Umm al-Qura calendar)</span></div>
+      <div class="stat"><b>Eid al-Fitr: Tue 9 Mar 2027</b><span>1 Shawwal 1448 AH · subject to moon sighting</span></div>
+      <div class="stat"><b id="countdown">…</b><span>until the first Roza, 8 Feb 2027</span></div>
+    </div>
+  </header>
+
+  <div class="alert" role="note">
+    <b>⚠ Pehle ye padh lein / Read first:</b> Ramadan ki date har saal lagbhag <b>11 din pehle</b> shift ho jati hai — 2026 me pehla Roza 19 Feb ko tha, 2027 me 8 Feb ko expected hai. Aur asal shuruaat <b>chaand dikhne</b> par tay hoti hai, isliye India, Pakistan aur Bangladesh me shuruaat <b>ek din baad</b> bhi ho sakti hai. Final date apni local masjid / moon-sighting committee se zaroor confirm karein, aur har saal timetable dobara check karein.
+  </div>
+
+  <div class="controls" aria-label="Timetable settings">
+    <div>
+      <label class="f" for="city">Your city · शहर चुनें</label>
+      <select id="city"></select>
+    </div>
+    <div>
+      <label class="f" for="method">Calculation method</label>
+      <select id="method">
+        <option value="karachi" selected>Karachi (Hanafi, South Asia) — Fajr 18°</option>
+        <option value="mwl">Muslim World League — Fajr 18°</option>
+        <option value="umm">Umm al-Qura, Makkah — Fajr 18.5°</option>
+        <option value="egypt">Egyptian Authority — Fajr 19.5°</option>
+        <option value="isna">ISNA (North America) — Fajr 15°</option>
+      </select>
+    </div>
+    <div>
+      <label class="f" for="startShift">Ramadan starts</label>
+      <select id="startShift">
+        <option value="0" selected>8 Feb 2027 (Umm al-Qura / Gulf)</option>
+        <option value="1">9 Feb 2027 (+1 day, if moon is sighted late in South Asia)</option>
+      </select>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn btn-main" id="btnCsv" type="button">⬇ Download timetable (CSV)</button>
+    <button class="btn btn-ghost" id="btnCopy" type="button">Copy today's times</button>
+  </div>
+  <p class="hint" id="copyMsg" aria-live="polite"></p>
+  <p class="hint">Sehri time = Fajr ka waqt, jahan Sehri khatm hoti hai (kuch log ehtiyatan 5–10 minute pehle khana band kar dete hain — Imsak). Iftar time = Maghrib / suraj doobne ka waqt. Method badalne se Fajr me kuch minute ka farq pad sakta hai — apni masjid ke calendar se mila lein.</p>
+
+  <section aria-labelledby="h-summary">
+    <h2 id="h-summary">At a glance · <span class="hindi" id="glanceCity">Delhi</span></h2>
+    <div class="cards">
+      <div class="card">
+        <div class="tag">First Roza · 1 Ramadan</div>
+        <div class="big" id="firstDate">Mon, 8 Feb 2027</div>
+        <div class="times">
+          <div><span>Sehri ends</span><b id="firstSehri">—</b></div>
+          <div><span>Iftar</span><b id="firstIftar">—</b></div>
+          <div><span>Fast</span><b id="firstDur">—</b></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tag">Last Roza · 29 Ramadan</div>
+        <div class="big" id="lastDate">Mon, 8 Mar 2027</div>
+        <div class="times">
+          <div><span>Sehri ends</span><b id="lastSehri">—</b></div>
+          <div><span>Iftar</span><b id="lastIftar">—</b></div>
+          <div><span>Fast</span><b id="lastDur">—</b></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tag">Laylat al-Qadr · 27th night</div>
+        <div class="big" id="qadrDate">Sat, 6 Mar 2027</div>
+        <p class="small">The 27th night (night of 5–6 Mar, starting at Maghrib on 5 Mar) is the most widely observed night for Laylat al-Qadr. The odd nights of the last 10 days — 21, 23, 25, 27, 29 — are all marked in the table below.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-table">
+    <h2 id="h-table">Full month table · <span class="hindi">poora mahina, roz ka time</span></h2>
+    <p class="lede" id="tableLede">29 Rozas for Delhi — Sehri end and Iftar for every day.</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Roza</th><th>Date</th><th>Sehri ends (Fajr)</th><th>Iftar (Maghrib)</th><th>Fast length</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="hint">🟡 Gold row = 27th Roza (Laylat al-Qadr, widely observed). Gold edge = Friday (Jumu'ah). "Last 10" badge = aakhri 10 din, jinki raaton me ibadat par zor diya jata hai.</p>
+  </section>
+
+  <section aria-labelledby="h-compare">
+    <h2 id="h-compare">First Roza across cities · <span class="hindi">pehle Roze ka time, sheher-dar-sheher</span></h2>
+    <p class="lede">Ek hi din, alag sheher — suraj ke hisaab se time kitna badal jata hai. Poora mahina dekhne ke liye upar se apna sheher chunein.</p>
+    <div class="tablebox">
+      <table class="compare">
+        <thead><tr><th>City</th><th>Sehri ends</th><th>Iftar</th><th>Fast length</th></tr></thead>
+        <tbody id="compareBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-ashra">
+    <h2 id="h-ashra">The three Ashras · <span class="hindi">mahine ke teen hisse</span></h2>
+    <div class="ashra">
+      <div class="card"><div class="tag">Roza 1–10</div><div class="big">Rahmah — Mercy</div><p class="small">Pehla Ashra Allah ki rehmat ka mana jata hai.</p></div>
+      <div class="card"><div class="tag">Roza 11–20</div><div class="big">Maghfirah — Forgiveness</div><p class="small">Doosra Ashra maghfirat (maafi) talab karne ka hai.</p></div>
+      <div class="card"><div class="tag">Roza 21–29</div><div class="big">Najah — Salvation</div><p class="small">Aakhri Ashra — isme Laylat al-Qadr ki talaash ki jati hai, jo hazar mahino se behtar raat hai.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-dua">
+    <h2 id="h-dua">Sehri &amp; Iftar duas</h2>
+    <div class="duas">
+      <div class="dua">
+        <h3>Sehri ki niyyat (intention for the fast)</h3>
+        <p class="arabic" lang="ar" dir="rtl">وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ</p>
+        <p class="translit">Wa bi-sawmi ghadin nawaytu min shahri Ramadan.</p>
+        <p class="meaning">Meaning: "I intend to keep the fast for tomorrow in the month of Ramadan." Niyyat dil se hoti hai — ye alfaaz sirf usi irade ko zubaan par late hain.</p>
+      </div>
+      <div class="dua">
+        <h3>Iftar ki dua (breaking the fast)</h3>
+        <p class="arabic" lang="ar" dir="rtl">اللَّهُمَّ إِنِّي لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَيْكَ تَوَكَّلْتُ وَعَلَىٰ رِزْقِكَ أَفْطَرْتُ</p>
+        <p class="translit">Allahumma inni laka sumtu, wa bika aamantu, wa 'alayka tawakkaltu, wa 'ala rizqika aftartu.</p>
+        <p class="meaning">Meaning: "O Allah, I fasted for You, I believe in You, I trust in You, and with Your provision I break my fast."</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-notes">
+    <h2 id="h-notes">Important notes · <span class="hindi">zaroor samjhein</span></h2>
+    <div class="notes">
+      <h3>Dates har saal ~11 din pehle kyun ho jati hain?</h3>
+      <p>Islamic (Hijri) saal chaand par chalta hai — 354 ya 355 din ka — jabki Gregorian saal 365 din ka hota hai. Is ~11 din ke farq ki wajah se Ramadan har saal peeche khisakta rehta hai: <b>2026 me 19 Feb → 2027 me 8 Feb → 2028 me ~28 Jan</b>. Isi liye purana timetable kabhi dobara istemal na karein — <b>har saal naya timetable check karna zaroori hai</b>.</p>
+      <h3>Moon sighting — ek din ka farq pad sakta hai</h3>
+      <p>Upar ki dates Umm al-Qura calendar (Saudi Arabia ka official civil calendar) par based hain: pehla Roza <b>8 Feb 2027</b>, aakhri Roza <b>8 Mar 2027</b>, Eid al-Fitr <b>9 Mar 2027</b>. India, Pakistan aur Bangladesh jaise deshon me Ramadan local chaand dikhne se shuru hota hai, isliye wahan shuruaat ek din baad (9 Feb) ho sakti hai — upar "+1 day" wala option isiliye diya hai. Apne sheher ki final date local moon-sighting committee / masjid se confirm karein.</p>
+      <h3>Times kaise nikale gaye hain?</h3>
+      <ul>
+        <li>Har sheher ke latitude/longitude se suraj ki position calculate karke Fajr (Sehri end) aur Maghrib (Iftar) nikala gaya hai — yehi astronomical method bade prayer-time calendars use karte hain.</li>
+        <li>Method badalne (Karachi / MWL / Umm al-Qura / Egypt / ISNA) se Fajr ke time me kuch minute ka farq pad sakta hai. Apni masjid jis method ko follow karti hai, wahi chunein.</li>
+        <li>Kisi khaas din masjid ke printed calendar se 2–5 minute ka farq mile to masjid wala time hi follow karein — local calendar ehtiyat (safety margin) jod sakta hai.</li>
+      </ul>
+      <h3>Sources</h3>
+      <p>Ramadan 1448 dates: <a href="https://ummalquracalendar.org/umm-al-qura-ramadan-calendar/" target="_blank" rel="noopener">Umm al-Qura Ramadan Calendar</a> · <a href="https://islamichijricalendar.com/ramadan-2027" target="_blank" rel="noopener">Ramadan 2027 — Islamic Hijri Calendar</a>. Times on this page are calculated in your browser for the selected city; they are a guide, not an official masjid timetable.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Ramadan Mubarak! 🌙 Ye timetable Ramadan 1448 AH (Feb–Mar 2027) ke liye hai. Dates chaand dikhne par ±1 din badal sakti hain — har saal dobara check karein.</p>
+  </footer>
+</div>
+
+<script>
+// ---------------- Cities: name, country, lat, lng, UTC offset (Feb–Mar, no DST in this window except none apply) ----------------
+var CITIES = [
+  {g:"India", n:"Delhi", lat:28.6139, lng:77.2090, tz:5.5},
+  {g:"India", n:"Mumbai", lat:19.0760, lng:72.8777, tz:5.5},
+  {g:"India", n:"Lucknow", lat:26.8467, lng:80.9462, tz:5.5},
+  {g:"India", n:"Hyderabad", lat:17.3850, lng:78.4867, tz:5.5},
+  {g:"India", n:"Kolkata", lat:22.5726, lng:88.3639, tz:5.5},
+  {g:"India", n:"Bengaluru", lat:12.9716, lng:77.5946, tz:5.5},
+  {g:"India", n:"Chennai", lat:13.0827, lng:80.2707, tz:5.5},
+  {g:"India", n:"Patna", lat:25.5941, lng:85.1376, tz:5.5},
+  {g:"India", n:"Jaipur", lat:26.9124, lng:75.7873, tz:5.5},
+  {g:"India", n:"Ahmedabad", lat:23.0225, lng:72.5714, tz:5.5},
+  {g:"India", n:"Bhopal", lat:23.2599, lng:77.4126, tz:5.5},
+  {g:"India", n:"Srinagar", lat:34.0837, lng:74.7973, tz:5.5},
+  {g:"India", n:"Guwahati", lat:26.1445, lng:91.7362, tz:5.5},
+  {g:"India", n:"Kochi", lat:9.9312, lng:76.2673, tz:5.5},
+  {g:"Pakistan", n:"Karachi", lat:24.8607, lng:67.0011, tz:5},
+  {g:"Pakistan", n:"Lahore", lat:31.5204, lng:74.3587, tz:5},
+  {g:"Pakistan", n:"Islamabad", lat:33.7294, lng:73.0931, tz:5},
+  {g:"Bangladesh", n:"Dhaka", lat:23.8103, lng:90.4125, tz:6},
+  {g:"Bangladesh", n:"Chattogram", lat:22.3569, lng:91.7832, tz:6},
+  {g:"Middle East", n:"Makkah", lat:21.3891, lng:39.8579, tz:3},
+  {g:"Middle East", n:"Madinah", lat:24.5247, lng:39.5692, tz:3},
+  {g:"Middle East", n:"Dubai", lat:25.2048, lng:55.2708, tz:4},
+  {g:"Middle East", n:"Riyadh", lat:24.7136, lng:46.6753, tz:3},
+  {g:"Middle East", n:"Doha", lat:25.2854, lng:51.5310, tz:3},
+  {g:"Asia & Europe", n:"Kuala Lumpur", lat:3.1390, lng:101.6869, tz:8},
+  {g:"Asia & Europe", n:"Jakarta", lat:-6.2088, lng:106.8456, tz:7},
+  {g:"Asia & Europe", n:"Istanbul", lat:41.0082, lng:28.9784, tz:3},
+  {g:"Asia & Europe", n:"London", lat:51.5074, lng:-0.1278, tz:0},
+  {g:"North America", n:"New York", lat:40.7128, lng:-74.0060, tz:-5},
+  {g:"North America", n:"Toronto", lat:43.6532, lng:-79.3832, tz:-5}
+];
+var METHODS = { karachi:18, mwl:18, umm:18.5, egypt:19.5, isna:15 };
+var DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var DAYS_S = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+var MONTHS_S = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+// ---------------- Solar math (PrayTimes-style astronomical calculation) ----------------
+function dtr(d){ return d*Math.PI/180; } function rtd(r){ return r*180/Math.PI; }
+function sinDeg(d){ return Math.sin(dtr(d)); } function cosDeg(d){ return Math.cos(dtr(d)); }
+function fixAngle(a){ a = a % 360; return a < 0 ? a + 360 : a; }
+function fixHour(a){ a = a % 24; return a < 0 ? a + 24 : a; }
+function julian(y, m, d){
+  if (m <= 2){ y -= 1; m += 12; }
+  var A = Math.floor(y/100), B = 2 - A + Math.floor(A/4);
+  return Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5;
+}
+function sunPos(jd){
+  var D = jd - 2451545.0;
+  var g = fixAngle(357.529 + 0.98560028*D);
+  var q = fixAngle(280.459 + 0.98564736*D);
+  var L = fixAngle(q + 1.915*sinDeg(g) + 0.020*sinDeg(2*g));
+  var e = 23.439 - 0.00000036*D;
+  var RA = fixHour(rtd(Math.atan2(cosDeg(e)*sinDeg(L), cosDeg(L)))/15);
+  var decl = rtd(Math.asin(sinDeg(e)*sinDeg(L)));
+  var eqt = q/15 - RA;
+  return { decl: decl, eqt: eqt };
+}
+function timeForAngle(jd, lat, angleDeg, ccw){
+  var sp = sunPos(jd);
+  var noon = fixHour(12 - sp.eqt);
+  var cosT = (sinDeg(-angleDeg) - sinDeg(lat)*sinDeg(sp.decl)) / (cosDeg(lat)*cosDeg(sp.decl));
+  if (cosT < -1 || cosT > 1) return null;
+  var T = rtd(Math.acos(cosT))/15;
+  return ccw ? noon - T : noon + T;
+}
+function dayTimes(city, date, fajrAngle){
+  var jd = julian(date.getFullYear(), date.getMonth()+1, date.getDate());
+  var fajr = timeForAngle(jd, city.lat, fajrAngle, true);
+  var magh = timeForAngle(jd, city.lat, 0.833, false);
+  var adj = city.tz - city.lng/15;
+  if (fajr !== null) fajr = fixHour(fajr + adj);
+  if (magh !== null) magh = fixHour(magh + adj);
+  return { fajr: fajr, maghrib: magh };
+}
+function fmtTime(h){
+  if (h === null || isNaN(h)) return "—";
+  var hh = Math.floor(h), mm = Math.round((h - hh)*60);
+  if (mm === 60){ mm = 0; hh = (hh+1) % 24; }
+  var ap = hh >= 12 ? "PM" : "AM";
+  var h12 = hh % 12; if (h12 === 0) h12 = 12;
+  return h12 + ":" + (mm < 10 ? "0" : "") + mm + " " + ap;
+}
+function fmtDur(fajr, magh){
+  if (fajr === null || magh === null) return "—";
+  var mins = Math.round((magh - fajr)*60);
+  return Math.floor(mins/60) + "h " + (mins % 60) + "m";
+}
+function fmtDate(d){ return DAYS_S[d.getDay()] + ", " + d.getDate() + " " + MONTHS_S[d.getMonth()] + " " + d.getFullYear(); }
+
+// ---------------- Build UI ----------------
+var citySel = document.getElementById("city");
+(function(){
+  var lastG = null, og = null;
+  CITIES.forEach(function(c, i){
+    if (c.g !== lastG){ og = document.createElement("optgroup"); og.label = c.g; citySel.appendChild(og); lastG = c.g; }
+    var o = document.createElement("option"); o.value = i; o.textContent = c.n + " (" + c.g + ")"; og.appendChild(o);
+  });
+})();
+
+var currentRows = [];
+
+function ramadanDates(shift){
+  var out = [];
+  for (var i = 0; i < 29; i++){
+    out.push(new Date(2027, 1, 8 + shift + i));
+  }
+  return out;
+}
+
+function render(){
+  var city = CITIES[parseInt(citySel.value, 10) || 0];
+  var angle = METHODS[document.getElementById("method").value] || 18;
+  var shift = parseInt(document.getElementById("startShift").value, 10) || 0;
+  var dates = ramadanDates(shift);
+  var tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  currentRows = [];
+
+  dates.forEach(function(d, idx){
+    var roza = idx + 1;
+    var t = dayTimes(city, d, angle);
+    var row = { roza: roza, date: d, fajr: t.fajr, maghrib: t.maghrib };
+    currentRows.push(row);
+    var tr = document.createElement("tr");
+    if (roza === 27) tr.className = "qadr";
+    else if (d.getDay() === 5) tr.className = "friday";
+    var badges = "";
+    if (roza >= 21) badges += '<span class="badge gold">Last 10</span>';
+    if (roza === 21 || roza === 23 || roza === 25 || roza === 29) badges += '<span class="badge">Odd night</span>';
+    if (roza === 27) badges += '<span class="badge qadr">Laylat al-Qadr ★</span>';
+    if (d.getDay() === 5) badges += '<span class="badge">Jumu\'ah</span>';
+    tr.innerHTML =
+      '<td class="roza">' + roza + badges + '</td>' +
+      '<td class="datecell">' + DAYS[d.getDay()] + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear() + '</td>' +
+      '<td class="time" data-l="Sehri ends">' + fmtTime(t.fajr) + '</td>' +
+      '<td class="time" data-l="Iftar">' + fmtTime(t.maghrib) + '</td>' +
+      '<td class="dur">' + fmtDur(t.fajr, t.maghrib) + '</td>';
+    tbody.appendChild(tr);
+  });
+
+  var f = currentRows[0], l = currentRows[currentRows.length - 1];
+  document.getElementById("glanceCity").textContent = city.n;
+  document.getElementById("tableLede").textContent = "29 Rozas for " + city.n + " (" + city.g + ") — Sehri end and Iftar for every day, " + fmtDate(f.date) + " to " + fmtDate(l.date) + ".";
+  document.getElementById("firstDate").textContent = fmtDate(f.date);
+  document.getElementById("firstSehri").textContent = fmtTime(f.fajr);
+  document.getElementById("firstIftar").textContent = fmtTime(f.maghrib);
+  document.getElementById("firstDur").textContent = fmtDur(f.fajr, f.maghrib);
+  document.getElementById("lastDate").textContent = fmtDate(l.date);
+  document.getElementById("lastSehri").textContent = fmtTime(l.fajr);
+  document.getElementById("lastIftar").textContent = fmtTime(l.maghrib);
+  document.getElementById("lastDur").textContent = fmtDur(l.fajr, l.maghrib);
+  var q = currentRows[26];
+  document.getElementById("qadrDate").textContent = fmtDate(q.date);
+
+  // comparison: first Roza in popular cities
+  var popular = ["Delhi","Mumbai","Kolkata","Lucknow","Hyderabad","Karachi","Dhaka","Makkah","Dubai","London"];
+  var cb = document.getElementById("compareBody");
+  cb.innerHTML = "";
+  popular.forEach(function(name){
+    var c = null;
+    for (var i = 0; i < CITIES.length; i++){ if (CITIES[i].n === name){ c = CITIES[i]; break; } }
+    if (!c) return;
+    var t = dayTimes(c, dates[0], angle);
+    var tr = document.createElement("tr");
+    tr.innerHTML = '<td>' + c.n + '</td><td class="time" data-l="Sehri ends">' + fmtTime(t.fajr) + '</td><td class="time" data-l="Iftar">' + fmtTime(t.maghrib) + '</td><td class="dur">' + fmtDur(t.fajr, t.maghrib) + '</td>';
+    cb.appendChild(tr);
+  });
+}
+
+citySel.addEventListener("change", render);
+document.getElementById("method").addEventListener("change", render);
+document.getElementById("startShift").addEventListener("change", render);
+render();
+
+// Countdown to first Roza (8 Feb 2027)
+(function(){
+  var el = document.getElementById("countdown");
+  var start = new Date(2027, 1, 8), end = new Date(2027, 2, 9);
+  var now = new Date(); now.setHours(0,0,0,0);
+  var diff = Math.round((start - now) / 86400000);
+  if (diff > 0) el.textContent = diff + " days to go";
+  else if (now < end) el.textContent = "Ramadan is on — Day " + (Math.round((now - start)/86400000) + 1) + " (Umm al-Qura)";
+  else el.textContent = "Ramadan 1448 has ended";
+})();
+
+// Download CSV
+document.getElementById("btnCsv").addEventListener("click", function(){
+  var city = CITIES[parseInt(citySel.value, 10) || 0];
+  var lines = ["Roza,Date,Day,Sehri Ends (Fajr),Iftar (Maghrib),Fast Length"];
+  currentRows.forEach(function(r){
+    lines.push(r.roza + "," + r.date.getDate() + " " + MONTHS[r.date.getMonth()] + " " + r.date.getFullYear() + "," + DAYS[r.date.getDay()] + "," + fmtTime(r.fajr) + "," + fmtTime(r.maghrib) + "," + fmtDur(r.fajr, r.maghrib));
+  });
+  var blob = new Blob([lines.join("\n")], { type: "text/csv" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "ramadan-2027-timetable-" + city.n.toLowerCase().replace(/\s+/g, "-") + ".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+});
+
+// Copy first-day times
+document.getElementById("btnCopy").addEventListener("click", function(){
+  var city = CITIES[parseInt(citySel.value, 10) || 0];
+  var f = currentRows[0];
+  var text = "Ramadan 1448 — " + city.n + " | First Roza " + fmtDate(f.date) + ": Sehri ends " + fmtTime(f.fajr) + ", Iftar " + fmtTime(f.maghrib) + " (Fast " + fmtDur(f.fajr, f.maghrib) + "). Dates subject to moon sighting.";
+  var msg = document.getElementById("copyMsg");
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ msg.textContent = "Copied: " + text; }, function(){ msg.textContent = text; });
+  } else { msg.textContent = text; }
+});
+</script>
+<!-- Gmail signup — Good Morning Kids email list (email-link verified) -->
+<section id="gmk-email-signup" style="max-width:640px;margin:28px auto 0;padding:20px 16px;text-align:center;border-top:2px dashed #f0c040;">
+<h3 style="margin:0 0 6px;font-size:18px;">Apna Gmail daalo — verify karo, naye free tools aur updates ki khabar pao</h3>
+<p style="margin:0 0 12px;color:#666;font-size:14px;">Hum aapke Gmail par ek verification link bhejenge. Link par click karte hi aapka email save ho jayega. Koi spam nahi.</p>
+<form id="gmkEmailForm" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+<input id="gmkEmailInput" type="email" required placeholder="aapka@gmail.com" style="flex:1;min-width:220px;max-width:320px;padding:10px 12px;font-size:15px;border:1px solid #ccc;border-radius:8px;" />
+<button type="submit" style="padding:10px 18px;font-size:15px;background:#f59e0b;color:#fff;border:none;border-radius:8px;cursor:pointer;">Verification Link Bhejo</button>
+</form>
+<p id="gmkEmailMsg" style="margin:10px 0 0;font-size:14px;min-height:20px;"></p>
+</section>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+var TOOL_NAME = "ramadan-timetable";
+var TOOL_URL = "https://abcd842323-spec.github.io/ramadan-timetable/";
+var form = document.getElementById("gmkEmailForm");
+var input = document.getElementById("gmkEmailInput");
+var msg = document.getElementById("gmkEmailMsg");
+var fbDb = null;
+function show(color, text){ msg.style.color = color; msg.textContent = text; }
+function initFb(){
+if (typeof firebase === "undefined") return false;
+if (!firebase.apps || !firebase.apps.length) {
+firebase.initializeApp({apiKey:"AIzaSyBwPT-AfPvxH3AbEJ8IMPDVFwieZfvv-yg",authDomain:"good-morning-kids-17b08.firebaseapp.com",projectId:"good-morning-kids-17b08",storageBucket:"good-morning-kids-17b08.firebasestorage.app",messagingSenderId:"805083378699",appId:"1:805083378699:web:a904d43f2cd2933aedc30e"});
+}
+fbDb = firebase.firestore();
+return true;
+}
+function handleEmailLink(){
+if (typeof firebase === "undefined") return;
+if (!firebase.auth().isSignInWithEmailLink(window.location.href)) return;
+var email = window.localStorage.getItem("gmkEmailForSignIn");
+if (!email) {
+email = window.prompt("Verification ke liye apna Gmail dobara daalo:");
+if (!email) return;
+}
+if (!initFb()) { show("#c00", "Verify nahi ho paya — internet check karke dobara try karo."); return; }
+firebase.auth().signInWithEmailLink(email, window.location.href).then(function(){
+window.localStorage.removeItem("gmkEmailForSignIn");
+return fbDb.collection("toolEmails").add({email: email.trim().toLowerCase(), tool: TOOL_NAME, verified: true, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
+}).then(function(){
+show("green", "Gmail verify ho gaya, dhanyavaad! \u2713");
+if (form) form.querySelector("button").disabled = true;
+}).catch(function(){
+show("#c00", "Verification link kaam nahi kar raha — naya link mangne ke liye dobara Gmail daalo.");
+});
+}
+form.addEventListener("submit", function(e){
+e.preventDefault();
+var email = input.value.trim().toLowerCase();
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { show("#c00", "Sahi Gmail daalo — jaise aapka@gmail.com"); return; }
+show("#666", "Verification link bhej rahe hain…");
+if (!initFb()) { show("#c00", "Abhi link nahi bhej paye — internet check karke dobara try karo."); return; }
+var actionCodeSettings = { url: TOOL_URL, handleCodeInApp: true };
+firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings).then(function(){
+window.localStorage.setItem("gmkEmailForSignIn", email);
+show("green", "Verification link bhej diya! Apne Gmail me link kholo aur verify karo — tabhi aapka email save hoga.");
+form.querySelector("button").disabled = true;
+}).catch(function(){
+show("#c00", "Link nahi bhej paye — dobara try karo.");
+});
+});
+if (document.readyState === "loading") {
+document.addEventListener("DOMContentLoaded", handleEmailLink);
+} else {
+handleEmailLink();
+}
+})();
+</script>
+
+
+<div style="text-align:center;padding:18px 12px 28px;color:#666;font-size:14px;">By Mahesh Kumar</div>
+
+<!-- Adsterra ads (GitHub Pages site 6231775) -->
+<script async fetchpriority="high" data-cfasync="false" src="https://bauval.org/21/f2aab14137246b166ffab0c2f48eb225"></script>
+<div id="container-f2aab14137246b166ffab0c2f48eb225"></div>
+<script data-cfasync="false" src="https://bauval.org/14/b26c99f8ab4002c619dc2e982f8e61aa"></script>
+</body>
+</html>
